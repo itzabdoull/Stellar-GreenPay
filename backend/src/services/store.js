@@ -14,7 +14,7 @@ const seedProjects = [
       "Planting 1 million native trees in the Brazilian Amazon to restore biodiversity and capture CO2. Every XLM donated funds the planting and care of native species selected by local communities.",
     category: "Reforestation",
     location: "Brazil, South America",
-    walletAddress: "GAAZI4TCR3TY5OJHCTJC2A4QSY6CJWJH5IAJTGKIN2ER7LBNVKOCCWN",
+    walletAddress: "GAAZI4TCR3TY5OJHCTJC2A4QSY6CJWJH5IAJTGKIN2ER7LBNVKOCCWNW",
     goalXLM: "50000",
     raisedXLM: "18420",
     donorCount: 147,

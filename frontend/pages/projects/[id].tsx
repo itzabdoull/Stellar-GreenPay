@@ -90,19 +90,31 @@ export default function ProjectDetail({
     typeof router.query.replyMemo === "string" ? router.query.replyMemo : undefined;
 
   useEffect(() => {
-    if (!id) return;
+    console.log("PROJECTS_DETAIL: useEffect running, id =", id);
+    if (!id) {
+      console.log("PROJECTS_DETAIL: id is falsy, returning");
+      return;
+    }
+    console.log("PROJECTS_DETAIL: Starting Promise.all fetches...");
     Promise.all([
       fetchProject(id as string),
       fetchProjectUpdates(id as string),
       fetchProjectMatches(id as string),
     ])
       .then(([p, u, m]) => {
+        console.log("PROJECTS_DETAIL: Promise.all success, project =", p);
         setProject(p);
         setUpdates(u);
         setMatches(m);
       })
-      .catch(() => router.push("/projects"))
-      .finally(() => setLoading(false));
+      .catch((err) => {
+        console.error("PROJECTS_DETAIL: Promise.all error:", err);
+        router.push("/projects");
+      })
+      .finally(() => {
+        console.log("PROJECTS_DETAIL: Promise.all finally, setting loading false");
+        setLoading(false);
+      });
   }, [id]);
 
   useEffect(() => {
@@ -1598,7 +1610,7 @@ export default function ProjectDetail({
             <p className="text-xs text-[#5a7a5a] mb-3 font-body">
               Receive an email when this project posts new updates.
             </p>
-            {subscriberCount !== null && (
+            {typeof subscriberCount === "number" && (
               <p className="text-xs text-[#8aaa8a] font-body mb-3">
                 📬 {subscriberCount.toLocaleString()}{" "}
                 {subscriberCount === 1 ? "subscriber" : "subscribers"}

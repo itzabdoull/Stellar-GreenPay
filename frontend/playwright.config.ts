@@ -24,7 +24,7 @@ export default defineConfig({
   webServer: {
     command: "npm run start",
     url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 120_000,
     env: {
       NEXT_PUBLIC_STELLAR_NETWORK: "testnet",

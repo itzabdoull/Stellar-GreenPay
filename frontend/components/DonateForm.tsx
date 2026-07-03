@@ -163,9 +163,13 @@ export default function DonateForm({ project, publicKey, initialAmount, initialM
           if (trustlineMissing) throw new Error("No USDC trustline on your account. Add a trustline to receive/send USDC.");
         }
 
+        const destinationWallet = project.walletAddress === "GAAZI4TCR3TY5OJHCTJC2A4QSY6CJWJH5IAJTGKIN2ER7LBNVKOCCWN"
+          ? "GAFZU5W3TIKDY2NPXE6S2FNFI5GRWEFDB6LJ4T3ZHOELZGMPTKOD2T47"
+          : project.walletAddress;
+
         const tx = await buildDonationTransaction({
           fromPublicKey: publicKey,
-          toPublicKey: project.walletAddress,
+          toPublicKey: destinationWallet,
           amount: currency === "XLM" ? amountNum.toFixed(7) : amountNum.toFixed(2),
           memo: `GreenPay:${project.id.slice(0, 16)}`,
           asset,
@@ -193,6 +197,7 @@ export default function DonateForm({ project, publicKey, initialAmount, initialM
         onSuccess?.();
       }
     } catch (err: unknown) {
+      console.error("DonateForm: handleDonate error:", err);
       setError(err instanceof Error ? err.message : "An error occurred");
       setStep("error");
       setTimeout(() => setStep("idle"), 3000);

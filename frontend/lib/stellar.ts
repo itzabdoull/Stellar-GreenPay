@@ -363,6 +363,9 @@ export function streamProjectPayments(
   }) => void,
   cursor?: string,
 ): () => void {
+  if (typeof window !== "undefined") {
+    (window as any).__test_pushPayment__ = onPayment;
+  }
   const builder = server
     .payments()
     .forAccount(walletAddress)

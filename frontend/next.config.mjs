@@ -37,7 +37,7 @@ function buildStaticCsp(allowFraming = false) {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: blob:",
-    `connect-src 'self' ${STELLAR_CONNECT} https://api.coingecko.com`,
+    `connect-src 'self' ${STELLAR_CONNECT} https://api.coingecko.com http://localhost:4000`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

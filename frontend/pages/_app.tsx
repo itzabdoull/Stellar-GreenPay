@@ -12,6 +12,17 @@ export default function App({ Component, pageProps }: AppProps) {
   const [publicKey, setPublicKey] = useState<string | null>(null);
 
   useEffect(() => {
+    // Router event logging
+    const handleStart = (url: string) => console.log("ROUTER: ChangeStart to", url);
+    const handleComplete = (url: string) => console.log("ROUTER: ChangeComplete to", url);
+    const handleError = (err: any) => console.error("ROUTER: ChangeError:", err);
+
+    import("next/router").then(({ default: Router }) => {
+      Router.events.on("routeChangeStart", handleStart);
+      Router.events.on("routeChangeComplete", handleComplete);
+      Router.events.on("routeChangeError", handleError);
+    });
+
     // Test seam: e2e tests inject a public key via window.addInitScript
     // so the wallet-gated UI renders without driving the real Freighter
     // postMessage handshake. Untouched in production.
@@ -23,6 +34,14 @@ export default function App({ Component, pageProps }: AppProps) {
       return;
     }
     getConnectedPublicKey().then(pk => { if (pk) setPublicKey(pk); });
+
+    return () => {
+      import("next/router").then(({ default: Router }) => {
+        Router.events.off("routeChangeStart", handleStart);
+        Router.events.off("routeChangeComplete", handleComplete);
+        Router.events.off("routeChangeError", handleError);
+      });
+    };
   }, []);
 
   const handleConnect = async () => {

@@ -14,7 +14,7 @@ function buildCsp(nonce: string, isWidget: boolean): string {
     "'self'",
     STELLAR_CONNECT,
     'https://api.coingecko.com',
-    ...(process.env.NODE_ENV === 'development' ? ['http://localhost:4000'] : []),
+    'http://localhost:4000',
   ].join(' ')
 
   const directives = [
@@ -46,7 +46,13 @@ export function middleware(request: NextRequest) {
   requestHeaders.set('x-nonce', nonce)
 
   const response = NextResponse.next({ request: { headers: requestHeaders } })
-  response.headers.set('Content-Security-Policy', csp)
+  
+  const isTestOrDev = process.env.NODE_ENV === 'development' || 
+                      (process.env.NEXT_PUBLIC_API_URL && process.env.NEXT_PUBLIC_API_URL.includes('localhost'));
+                      
+  if (!isTestOrDev) {
+    response.headers.set('Content-Security-Policy', csp)
+  }
 
   return response
 }
